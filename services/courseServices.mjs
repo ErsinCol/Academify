@@ -12,7 +12,7 @@ const findWhere = (where)=>{
     return Course.findOne(where)
 }
 
-export {
+export default{
     insert,
     list,
     findWhere

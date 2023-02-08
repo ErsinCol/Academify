@@ -1,7 +1,8 @@
-import { insert, list, findWhere } from "../services/courseServices.mjs"
+import courseService from "../services/courseServices.mjs"
+import categoryService from "../services/categoryService.mjs"
 
 const createCourse = (req, res)=>{
-    insert(req.body)
+    courseService.insert(req.body)
         .then(course => {
             if(!course) return res.status(500).json({
                 type: 'error',
@@ -21,27 +22,37 @@ const createCourse = (req, res)=>{
 }
 
 const getAllCourse = (req, res)=>{
-    list()
-        .then(courses=>{
-            if(!courses) return res.status(404).json({
-                type: 'error',
-                message: 'not found course'
+
+    const categorySlug = req.query.categories
+
+    let filter = {}
+
+    if(categorySlug){
+        categoryService.findWhere({slug:categorySlug})
+            .then(returnedCategory=>{
+                filter = {category: returnedCategory._id}
             })
-            res.status(200).render('courses',{
-                page_name: 'courses',
-                courses
-            })
+    }
+
+    Promise.all([
+        categoryService.list(),
+        courseService.list(filter)
+    ]).then(([categories,courses])=>{
+        res.status(200).render('courses',{
+            page_name: 'courses',
+            categories,
+            courses
         })
-        .catch(err=>{
-            res.status(500).json({
-                type:'error',
-                message : err
-            })
+    }).catch(err=>{
+        res.status(500).json({
+            type: 'error',
+            message: err
         })
+    })
 }
 
 const getCourse = (req, res)=>{
-    findWhere({slug: req.params.slug})
+    courseService.findWhere({slug: req.params.slug})
         .then(course=>{
             if(!course) return res.status(404).json({
                 type: 'error',

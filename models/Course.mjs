@@ -16,6 +16,10 @@ const CourseSchema = new mongoose.Schema({
     slug: {
         type: 'string',
         unique: true
+    },
+    category:{
+        type: mongoose.Types.ObjectId,
+        ref: 'category'
     }
 },{timestamps: true, versionKey:false})
 
