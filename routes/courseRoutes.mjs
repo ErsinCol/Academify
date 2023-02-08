@@ -5,5 +5,6 @@ const routers = express.Router()
 
 routers.route('/').post(courseControllers.createCourse)
 routers.route('/').get(courseControllers.getAllCourse)
+routers.route('/:slug').get(courseControllers.getCourse)
 
 export default routers

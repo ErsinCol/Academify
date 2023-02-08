@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import slugify from 'slugify'
 
 const CourseSchema = new mongoose.Schema({
     name:{
@@ -11,7 +12,20 @@ const CourseSchema = new mongoose.Schema({
         type: 'string',
         required: true,
         trim: true
+    },
+    slug: {
+        type: 'string',
+        unique: true
     }
 },{timestamps: true, versionKey:false})
+
+CourseSchema.pre('validate',function(){
+    this.slug = slugify(this.name, {
+        lower: true,
+        strict: true,
+        replacement: '-',
+        trim : true
+    })
+})
 
 export default mongoose.model('course', CourseSchema)

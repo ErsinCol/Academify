@@ -1,15 +1,15 @@
-import { insert, list } from "../services/courseServices.mjs"
+import { insert, list, findWhere } from "../services/courseServices.mjs"
 
 const createCourse = (req, res)=>{
     insert(req.body)
-        .then(createdCourse => {
-            if(!createdCourse) return res.status(500).json({
+        .then(course => {
+            if(!course) return res.status(500).json({
                 type: 'error',
                 message: 'Not created course'
             })
             res.status(201).json({
                 type: 'success',
-                createdCourse
+                course
             })
         })
         .catch(err => {
@@ -40,7 +40,28 @@ const getAllCourse = (req, res)=>{
         })
 }
 
+const getCourse = (req, res)=>{
+    findWhere({slug: req.params.slug})
+        .then(course=>{
+            if(!course) return res.status(404).json({
+                type: 'error',
+                message : 'not found course'
+            })
+            res.status(200).render('course',{
+                page_name : 'courses',
+                course
+            })
+        })
+        .catch(err=>{
+            res.status(500).json({
+                type: 'error',
+                message: err
+            })
+        })
+}
+
 export default {
     createCourse,
-    getAllCourse
+    getAllCourse,
+    getCourse
 }

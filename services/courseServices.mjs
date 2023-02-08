@@ -8,7 +8,12 @@ const list = ()=>{
     return Course.find({})
 }
 
+const findWhere = (where)=>{
+    return Course.findOne(where)
+}
+
 export {
     insert,
-    list
+    list,
+    findWhere
 }
