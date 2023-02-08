@@ -1,4 +1,4 @@
-import { insert } from "../services/courseServices.mjs"
+import { insert, list } from "../services/courseServices.mjs"
 
 const createCourse = (req, res)=>{
     insert(req.body)
@@ -15,11 +15,32 @@ const createCourse = (req, res)=>{
         .catch(err => {
             res.status(500).json({
                 type:'error',
-                message: 'Internal Server Error'
+                message: err
+            })
+        })
+}
+
+const getAllCourse = (req, res)=>{
+    list()
+        .then(courses=>{
+            if(!courses) return res.status(404).json({
+                type: 'error',
+                message: 'not found course'
+            })
+            res.status(200).render('courses',{
+                page_name: 'courses',
+                courses
+            })
+        })
+        .catch(err=>{
+            res.status(500).json({
+                type:'error',
+                message : err
             })
         })
 }
 
 export default {
-    createCourse
+    createCourse,
+    getAllCourse
 }
