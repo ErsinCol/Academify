@@ -1,0 +1,60 @@
+/* Bootstrap Carousel Touch Slider.
+ http://bootstrapthemes.co
+
+ Credits: Bootstrap, jQuery, TouchSwipe, Animate.css, FontAwesome
+
+ */
+
+(function ($) {
+    'use strict';
+
+    $.fn.bsTouchSlider = function (options) {
+        const carousel = $('.carousel');
+        return this.each(function () {
+            function doAnimations(elems) {
+                // Cache the animationend event in a variable
+                const animEndEv =
+                    'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+                elems.each(function () {
+                    const $this = $(this);
+                    const $animationType = $this.data('animation');
+                    $this.addClass($animationType).one(animEndEv, function () {
+                        $this.removeClass($animationType);
+                    });
+                });
+            }
+
+            // Variables on page load
+            const $firstAnimatingElems = carousel
+                .find('.item:first')
+                .find("[data-animation ^= 'animated']");
+            // Initialize carousel
+            carousel.carousel();
+            // Animate captions in first slide on page load
+            doAnimations($firstAnimatingElems);
+            // Other slides to be animated on carousel slide event
+            carousel.on('slide.bs.carousel', function (e) {
+                const $animatingElems = $(e.relatedTarget).find(
+                    "[data-animation ^= 'animated']"
+                );
+                doAnimations($animatingElems);
+            });
+            // swipe initial
+            $('.carousel .carousel-inner').swipe({
+                swipeLeft: function (
+                    event,
+                    direction,
+                    distance,
+                    duration,
+                    fingerCount
+                ) {
+                    this.parent().carousel('next');
+                },
+                swipeRight: function () {
+                    this.parent().carousel('prev');
+                },
+                threshold: 0,
+            });
+        });
+    };
+})(jQuery);
