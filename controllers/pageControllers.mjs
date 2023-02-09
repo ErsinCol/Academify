@@ -23,9 +23,23 @@ const getLoginPage = (req, res) => {
   })
 }
 
+const getContactPage = (req, res) => {
+  res.status(200).render('contact', {
+    page_name: 'contact'
+  })
+}
+
+const getDashboardPage = (req, res) => {
+  res.status(200).render('dashboard', {
+    page_name: 'dashboard'
+  })
+}
+
 export default {
   getMainPage,
   getAboutPage,
   getRegisterPage,
-  getLoginPage
+  getLoginPage,
+  getContactPage,
+  getDashboardPage
 }

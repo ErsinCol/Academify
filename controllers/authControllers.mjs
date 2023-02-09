@@ -17,8 +17,13 @@ const loginUser = async (req, res) => {
     .then(user => {
       if (!user) return res.status(404).json({ type: 'error', message: 'not found user' })
       bcrypt.compare(password, user.password, (err, same) => {
-        if (same) return res.status(200).json({ type: 'success', message: 'you are logged in' })
-        return res.status(401).json({ type: 'error', message: 'not correct password' })
+        if (err) return res.status(500).json({type: 'error', message: err })
+        if (same) {
+          req.session.userID = user._id
+          res.status(200).redirect('/')
+        } else {
+          return res.status(401).json({ type: 'error', message: 'not correct password' })
+        }
       })
     })
     .catch(err => {

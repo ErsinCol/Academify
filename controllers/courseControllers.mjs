@@ -67,8 +67,11 @@ const getAllCourse = async (req, res) => {
 }
 
 const getCourse = (req, res) => {
-  courseService.findWhere({ slug: req.params.slug })
-    .then(course => {
+  Promise.all([
+    categoryService.list(),
+    courseService.findWhere({ slug: req.params.slug })
+  ])
+    .then(([categories, course]) => {
       if (!course) {
         return res.status(404).json({
           type: 'error',
@@ -77,7 +80,8 @@ const getCourse = (req, res) => {
       }
       res.status(200).render('course', {
         page_name: 'courses',
-        course
+        course,
+        categories
       })
     })
     .catch(err => {
