@@ -4,8 +4,8 @@ import pageRoutes from './pageRoutes.mjs'
 import courseRoutes from './courseRoutes.mjs'
 
 export default {
-    '/': pageRoutes,
-    '/categories': categoryRoutes,
-    '/users': authRoutes,
-    '/courses': courseRoutes
+  '/': pageRoutes,
+  '/categories': categoryRoutes,
+  '/users': authRoutes,
+  '/courses': courseRoutes
 }

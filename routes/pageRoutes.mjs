@@ -1,6 +1,6 @@
 import express from 'express'
-const routers = express.Router()
 import pageController from '../controllers/pageControllers.mjs'
+const routers = express.Router()
 
 routers.route('/').get(pageController.getMainPage)
 routers.route('/about').get(pageController.getAboutPage)

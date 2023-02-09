@@ -1,5 +1,5 @@
 import setEnv from './server.mjs'
 
-export default ()=>{
-    setEnv()
+export default () => {
+  setEnv()
 }

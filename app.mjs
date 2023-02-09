@@ -13,14 +13,14 @@ exeLoaders()
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 
 // ROUTES
-for(const [path,handler] of Object.entries(routeHandlers)){
-    app.use(path, handler)
+for (const [path, handler] of Object.entries(routeHandlers)) {
+  app.use(path, handler)
 }
 
 // LISTEN PORT
-app.listen(process.env.PORT , () => {
-    console.log(`app started on port ${process.env.PORT}`)
+app.listen(process.env.PORT, () => {
+  console.log(`app started on port ${process.env.PORT}`)
 })
