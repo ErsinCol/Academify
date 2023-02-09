@@ -1,14 +1,10 @@
+import BaseService from './baseService.mjs'
 import User from '../models/User.mjs'
 
-const insert = (data) => {
-  return new User(data).save()
+class AuthService extends BaseService {
+  constructor () {
+    super(User)
+  }
 }
 
-const findWhere = (where) => {
-  return User.findOne(where)
-}
-
-export default {
-  insert,
-  findWhere
-}
+export default new AuthService()

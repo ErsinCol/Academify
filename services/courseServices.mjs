@@ -1,24 +1,13 @@
+import BaseService from './baseService.mjs'
 import Course from '../models/Course.mjs'
+class CourseService extends BaseService {
+  constructor () {
+    super(Course)
+  }
 
-const insert = (data) => {
-  return new Course(data).save()
+  listByCategory (where) {
+    return Course.find({ category: where.category })
+  }
 }
 
-const list = () => {
-  return Course.find({})
-}
-
-const listByCategory = (where) => {
-  return Course.find({ category: where.category })
-}
-
-const findWhere = (where) => {
-  return Course.findOne(where)
-}
-
-export default {
-  insert,
-  list,
-  listByCategory,
-  findWhere
-}
+export default new CourseService()

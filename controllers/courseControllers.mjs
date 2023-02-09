@@ -1,8 +1,8 @@
-import courseService from '../services/courseServices.mjs'
-import categoryService from '../services/categoryService.mjs'
+import CourseService from '../services/courseServices.mjs'
+import CategoryService from '../services/categoryService.mjs'
 
 const createCourse = (req, res) => {
-  courseService.insert(req.body)
+  CourseService.insert(req.body)
     .then(course => {
       if (!course) {
         return res.status(500).json({
@@ -28,13 +28,13 @@ const getAllCourse = async (req, res) => {
 
   if (categorySlug) {
     let filter = {}
-    await categoryService.findWhere({ slug: categorySlug })
+    await CategoryService.findWhere({ slug: categorySlug })
       .then(returnedCat => {
         filter = { category: returnedCat._id }
       })
     Promise.all([
-      categoryService.list(),
-      courseService.listByCategory(filter)
+      CategoryService.list(),
+      CourseService.listByCategory(filter)
     ]).then(([categories, courses]) => {
       res.status(200).render('courses', {
         page_name: 'courses',
@@ -49,8 +49,8 @@ const getAllCourse = async (req, res) => {
     })
   } else {
     Promise.all([
-      categoryService.list(),
-      courseService.list()
+      CategoryService.list(),
+      CourseService.list()
     ]).then(([categories, courses]) => {
       res.status(200).render('courses', {
         page_name: 'courses',
@@ -68,8 +68,8 @@ const getAllCourse = async (req, res) => {
 
 const getCourse = (req, res) => {
   Promise.all([
-    categoryService.list(),
-    courseService.findWhere({ slug: req.params.slug })
+    CategoryService.list(),
+    CourseService.findWhere({ slug: req.params.slug })
   ])
     .then(([categories, course]) => {
       if (!course) {

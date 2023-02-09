@@ -3,6 +3,7 @@ import exeConfigs from './configs/index.mjs'
 import exeLoaders from './loaders/index.mjs'
 import routeHandlers from './routes/index.mjs'
 import session from 'express-session'
+import MongoStore from 'connect-mongo'
 const app = express()
 
 // EXECUTE INITIAL METHODS
@@ -19,7 +20,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(session({
   secret: process.env.SESSION_SECRET_KEY,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}` })
 }))
 // ROUTES
 app.use('*', (req, res, next) => {

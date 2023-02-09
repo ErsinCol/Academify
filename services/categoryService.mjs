@@ -1,19 +1,9 @@
+import BaseService from './baseService.mjs'
 import Category from '../models/Category.mjs'
-
-const insert = (data) => {
-  return new Category(data).save()
+class CategoryService extends BaseService {
+  constructor () {
+    super(Category)
+  }
 }
 
-const list = () => {
-  return Category.find({})
-}
-
-const findWhere = (where) => {
-  return Category.findOne(where)
-}
-
-export default {
-  insert,
-  list,
-  findWhere
-}
+export default new CategoryService()

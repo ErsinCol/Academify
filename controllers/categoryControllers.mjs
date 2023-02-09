@@ -1,7 +1,7 @@
-import categoryService from '../services/categoryService.mjs'
+import CategoryService from '../services/categoryService.mjs'
 
 const createCategory = (req, res) => {
-  categoryService.insert(req.body)
+  CategoryService.insert(req.body)
     .then(category => {
       res.status(201).json({
         type: 'success',
