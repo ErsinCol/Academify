@@ -21,34 +21,49 @@ const createCourse = (req, res)=>{
         })
 }
 
-const getAllCourse = (req, res)=>{
+const getAllCourse = async (req, res)=>{
 
     const categorySlug = req.query.categories
 
-    let filter = {}
-
     if(categorySlug){
-        categoryService.findWhere({slug:categorySlug})
-            .then(returnedCategory=>{
-                filter = {category: returnedCategory._id}
+        let filter = {}
+        await categoryService.findWhere({slug:categorySlug})
+            .then(returnedCat=>{
+                filter = {category: returnedCat._id}
             })
+        Promise.all([
+            categoryService.list(),
+            courseService.listByCategory(filter)
+        ]).then(([categories,courses])=>{
+            res.status(200).render('courses',{
+                page_name: 'courses',
+                courses,
+                categories
+            })
+        }).catch(err=>{
+            res.status(500).json({
+                type: 'error',
+                message: err
+            })
+        })
+    }else{
+        Promise.all([
+            categoryService.list(),
+            courseService.list()
+        ]).then(([categories,courses])=>{
+            res.status(200).render('courses',{
+                page_name: 'courses',
+                courses,
+                categories
+            })
+        }).catch(err=>{
+            res.status(500).json({
+                type: 'error',
+                message: err
+            })
+        })
     }
-
-    Promise.all([
-        categoryService.list(),
-        courseService.list(filter)
-    ]).then(([categories,courses])=>{
-        res.status(200).render('courses',{
-            page_name: 'courses',
-            categories,
-            courses
-        })
-    }).catch(err=>{
-        res.status(500).json({
-            type: 'error',
-            message: err
-        })
-    })
+    
 }
 
 const getCourse = (req, res)=>{

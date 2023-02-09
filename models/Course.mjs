@@ -18,18 +18,19 @@ const CourseSchema = new mongoose.Schema({
         unique: true
     },
     category:{
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'category'
     }
 },{timestamps: true, versionKey:false})
 
-CourseSchema.pre('validate',function(){
+CourseSchema.pre('validate',function(next){
     this.slug = slugify(this.name, {
         lower: true,
         strict: true,
         replacement: '-',
         trim : true
     })
+    next()
 })
 
 export default mongoose.model('course', CourseSchema)

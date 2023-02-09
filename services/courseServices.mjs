@@ -8,6 +8,10 @@ const list = ()=>{
     return Course.find({})
 }
 
+const listByCategory = (where)=>{
+    return Course.find({category: where.category})
+}
+
 const findWhere = (where)=>{
     return Course.findOne(where)
 }
@@ -15,5 +19,6 @@ const findWhere = (where)=>{
 export default{
     insert,
     list,
+    listByCategory,
     findWhere
 }

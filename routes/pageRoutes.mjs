@@ -4,5 +4,6 @@ import pageController from '../controllers/pageControllers.mjs'
 
 routers.route('/').get(pageController.getMainPage)
 routers.route('/about').get(pageController.getAboutPage)
+routers.route('/register').get(pageController.getRegisterPage)
 
 export default routers

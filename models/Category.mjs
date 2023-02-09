@@ -13,13 +13,14 @@ const CategorySchema = new mongoose.Schema({
     }
 },{versionKey: false, timestamps:true})
 
-CategorySchema.pre('validate',function(){
+CategorySchema.pre('validate',function(next){
     this.slug = slugify(this.name,{
         lower: true,
         strict: true,
         replacement: '-',
         trim : true
     })
+    next()
 })
 
 export default mongoose.model('category', CategorySchema)
