@@ -1,10 +1,7 @@
 import express from 'express'
-import pageRoutes from './routes/pageRoutes.mjs'
-import courseRoutes from './routes/courseRoutes.mjs'
-import categoriesRoutes from './routes/categoryRoutes.mjs'
-import authRouters from './routes/authRoutes.mjs'
 import exeConfigs from './configs/index.mjs'
 import exeLoaders from './loaders/index.mjs'
+import routeHandlers from './routes/index.mjs'
 
 const app = express()
 
@@ -19,10 +16,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 // ROUTES
-app.use('/', pageRoutes)
-app.use('/courses', courseRoutes)
-app.use('/categories', categoriesRoutes)
-app.use('/users', authRouters)
+for(const [path,handler] of Object.entries(routeHandlers)){
+    app.use(path, handler)
+}
 
 // LISTEN PORT
 app.listen(process.env.PORT , () => {

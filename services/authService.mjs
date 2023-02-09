@@ -4,6 +4,11 @@ const insert = (data)=>{
     return new User(data).save()
 }
 
+const findWhere = (where)=>{
+    return User.findOne(where)
+}
+
 export default {
-    insert
+    insert,
+    findWhere
 }
