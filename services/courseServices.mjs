@@ -6,7 +6,7 @@ class CourseService extends BaseService {
   }
 
   listByCategory (where) {
-    return Course.find({ category: where.category })
+    return Course.find({ category: where.category }).sort('-createdAt')
   }
 }
 

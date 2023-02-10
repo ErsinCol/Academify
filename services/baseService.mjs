@@ -8,7 +8,7 @@ class BaseService {
   }
 
   list () {
-    return this.BaseModel.find({})
+    return this.BaseModel.find({}).sort('-createdAt')
   }
 
   findWhere (where) {

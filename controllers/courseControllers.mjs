@@ -10,10 +10,7 @@ const createCourse = (req, res) => {
           message: 'Not created course'
         })
       }
-      res.status(201).json({
-        type: 'success',
-        course
-      })
+      res.redirect('/courses')
     })
     .catch(err => {
       res.status(500).json({

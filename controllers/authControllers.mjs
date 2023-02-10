@@ -1,11 +1,12 @@
 import AuthService from '../services/authService.mjs'
+import CategoryService from '../services/categoryService.mjs'
 import bcrypt from 'bcrypt'
 
 const createUser = (req, res) => {
   AuthService.insert(req.body)
     .then(user => {
       if (!user) return res.status(500).json({ type: 'error', message: 'fail create user' })
-      res.status(201).json({ type: 'success', user })
+      res.redirect('/login')
     })
     .catch(err => {
       res.status(500).json({ type: 'error', message: err })
@@ -39,14 +40,16 @@ const logoutUser = async (req, res) => {
 }
 
 const getDashboardPage = async (req, res) => {
-  let sessionUser
-  await AuthService.findWhere({ _id: req.session.userID })
-    .then(user => {
-      sessionUser = user
+  let sessionUser, categories
+  await Promise.all([AuthService.findWhere({ _id: req.session.userID }), CategoryService.list()])
+    .then(([user, cats]) => {
+      sessionUser = user,
+      categories = cats
     })
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
-    sessionUser
+    sessionUser,
+    categories
   })
 }
 
