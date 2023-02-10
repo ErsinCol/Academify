@@ -20,9 +20,10 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre('save', function (next) {
   const user = this
   bcrypt.hash(user.password, 10, (error, hash) => {
+    if (error) console.log('error :>> ', error)
     user.password = hash
     next()
   })
 })
 
-export default new mongoose.model('user', UserSchema)
+export default mongoose.model('user', UserSchema)

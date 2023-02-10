@@ -21,7 +21,7 @@ const loginUser = async (req, res) => {
         if (err) return res.status(500).json({ type: 'error', message: err })
         if (same) {
           req.session.userID = user._id
-          res.status(200).redirect('/')
+          res.status(200).redirect('/users/dashboard')
         } else {
           return res.status(401).json({ type: 'error', message: 'not correct password' })
         }
@@ -38,8 +38,21 @@ const logoutUser = async (req, res) => {
   })
 }
 
+const getDashboardPage = async (req, res) => {
+  let sessionUser
+  await AuthService.findWhere({ _id: req.session.userID })
+    .then(user => {
+      sessionUser = user
+    })
+  res.status(200).render('dashboard', {
+    page_name: 'dashboard',
+    sessionUser
+  })
+}
+
 export default {
   createUser,
   loginUser,
-  logoutUser
+  logoutUser,
+  getDashboardPage
 }
