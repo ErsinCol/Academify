@@ -1,12 +1,13 @@
 import CourseService from '../services/courseServices.mjs'
 import CategoryService from '../services/categoryService.mjs'
+import authService from '../services/authService.mjs'
 
 const createCourse = (req, res) => {
   const course = {
     name: req.body.name,
     description: req.body.description,
     category: req.body.category,
-    byTeacher: req.session.userID
+    user: req.session.userID
   }
   // user teacher mı nasıl kontrol ederiz
   CourseService.insert(course)
@@ -73,7 +74,7 @@ const getAllCourse = async (req, res) => {
 const getCourse = (req, res) => {
   Promise.all([
     CategoryService.list(),
-    CourseService.findWhere({ slug: req.params.slug }).populate('byTeacher')
+    CourseService.findWhere({ slug: req.params.slug }).populate('user')
   ])
     .then(([categories, course]) => {
       if (!course) {
@@ -96,8 +97,22 @@ const getCourse = (req, res) => {
     })
 }
 
+const enrollCourse = async (req, res) => {
+  await authService.findWhere({ _id: req.session.userID })
+    .then(user => {
+      user.courses.push({ _id: req.body.courseID })
+      return authService.updateWhere(req.session.userID, user)
+    }).then(() => {
+      res.status(200).redirect('/users/dashboard')
+    })
+    .catch((err) => {
+      res.status(500).json({ type: 'error', message: err })
+    })
+}
+
 export default {
   createCourse,
   getAllCourse,
-  getCourse
+  getCourse,
+  enrollCourse
 }

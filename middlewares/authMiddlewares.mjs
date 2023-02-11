@@ -32,9 +32,17 @@ const checkRoleTeacher = (req, res, next) => {
   next()
 }
 
+const checkRoleStudent = (req, res, next) => {
+  if (!req.body.role === 'student') {
+    return res.status(401).json({ type: 'error', message: 'you cant do it' })
+  }
+  next()
+}
+
 export default {
   checkAuth,
   alreadySession,
   checkExistRole,
-  checkRoleTeacher
+  checkRoleTeacher,
+  checkRoleStudent
 }

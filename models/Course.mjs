@@ -21,7 +21,7 @@ const CourseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'category'
   },
-  byTeacher: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
   }

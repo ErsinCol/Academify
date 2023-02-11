@@ -6,5 +6,6 @@ const routers = express.Router()
 routers.route('/').post(authMiddlewares.checkRoleTeacher, courseControllers.createCourse)
 routers.route('/').get(courseControllers.getAllCourse)
 routers.route('/:slug').get(courseControllers.getCourse)
+routers.route('/enroll').post(courseControllers.enrollCourse)
 
 export default routers

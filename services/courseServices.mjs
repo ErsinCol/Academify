@@ -5,8 +5,8 @@ class CourseService extends BaseService {
     super(Course)
   }
 
-  listByTeacher (where) {
-    return Course.find({ byTeacher: where.byTeacher })
+  listTeacherCourses (where) {
+    return Course.find(where)
   }
 
   listByCategory (where) {
