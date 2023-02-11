@@ -73,10 +73,11 @@ const getAllCourse = async (req, res) => {
 
 const getCourse = (req, res) => {
   Promise.all([
+    authService.findWhere({ _id: req.session.userID }),
     CategoryService.list(),
     CourseService.findWhere({ slug: req.params.slug }).populate('user')
   ])
-    .then(([categories, course]) => {
+    .then(([sessionUser, categories, course]) => {
       if (!course) {
         return res.status(404).json({
           type: 'error',
@@ -85,6 +86,7 @@ const getCourse = (req, res) => {
       }
       res.status(200).render('course', {
         page_name: 'courses',
+        sessionUser,
         course,
         categories
       })
@@ -110,9 +112,23 @@ const enrollCourse = async (req, res) => {
     })
 }
 
+const releaseCourse = async (req, res) => {
+  await authService.findWhere({ _id: req.session.userID })
+    .then(user => {
+      user.courses.pull({ _id: req.body.courseID })
+      return authService.updateWhere(req.session.userID, user)
+    }).then(() => {
+      res.status(200).redirect('/users/dashboard')
+    })
+    .catch((err) => {
+      res.status(500).json({ type: 'error', message: err })
+    })
+}
+
 export default {
   createCourse,
   getAllCourse,
   getCourse,
-  enrollCourse
+  enrollCourse,
+  releaseCourse
 }

@@ -7,5 +7,6 @@ routers.route('/').post(authMiddlewares.checkRoleTeacher, courseControllers.crea
 routers.route('/').get(courseControllers.getAllCourse)
 routers.route('/:slug').get(courseControllers.getCourse)
 routers.route('/enroll').post(courseControllers.enrollCourse)
+routers.route('/release').post(courseControllers.releaseCourse)
 
 export default routers

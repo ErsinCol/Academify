@@ -26,7 +26,7 @@
 										<h2><a href= "/courses/<%= courses[index].slug %>" title=""><%= courses[index].name %></a></h2>
 									</div>
 									<div class="course-desc">
-										<p><%= courses[index].description %> </p>
+										<p><%= courses[index].description.substring(0, 100) + "..." %> </p>
 									</div>
 								</div>
 								<div class="course-meta-bot">
