@@ -5,6 +5,10 @@ class CourseService extends BaseService {
     super(Course)
   }
 
+  listByTeacher (where) {
+    return Course.find({ byTeacher: where.byTeacher })
+  }
+
   listByCategory (where) {
     return Course.find({ category: where.category }).sort('-createdAt')
   }

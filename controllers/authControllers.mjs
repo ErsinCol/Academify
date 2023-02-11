@@ -1,5 +1,6 @@
 import AuthService from '../services/authService.mjs'
 import CategoryService from '../services/categoryService.mjs'
+import courseServices from '../services/courseServices.mjs'
 import bcrypt from 'bcrypt'
 
 const createUser = (req, res) => {
@@ -40,16 +41,21 @@ const logoutUser = async (req, res) => {
 }
 
 const getDashboardPage = async (req, res) => {
-  let sessionUser, categories
-  await Promise.all([AuthService.findWhere({ _id: req.session.userID }), CategoryService.list()])
-    .then(([user, cats]) => {
-      sessionUser = user,
-      categories = cats
-    })
+  const [user, cats, getCourses] = await Promise.all([
+    AuthService.findWhere({ _id: req.session.userID }),
+    CategoryService.list(),
+    courseServices.listByTeacher({ byTeacher: req.session.userID })
+  ])
+
+  const sessionUser = user
+  const categories = cats
+  const courses = getCourses
+
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     sessionUser,
-    categories
+    categories,
+    courses
   })
 }
 

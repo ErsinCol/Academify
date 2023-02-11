@@ -20,6 +20,10 @@ const CourseSchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'category'
+  },
+  byTeacher: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
   }
 }, { timestamps: true, versionKey: false })
 

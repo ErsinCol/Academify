@@ -2,7 +2,14 @@ import CourseService from '../services/courseServices.mjs'
 import CategoryService from '../services/categoryService.mjs'
 
 const createCourse = (req, res) => {
-  CourseService.insert(req.body)
+  const course = {
+    name: req.body.name,
+    description: req.body.description,
+    category: req.body.category,
+    byTeacher: req.session.userID
+  }
+  // user teacher mı nasıl kontrol ederiz
+  CourseService.insert(course)
     .then(course => {
       if (!course) {
         return res.status(500).json({
@@ -66,7 +73,7 @@ const getAllCourse = async (req, res) => {
 const getCourse = (req, res) => {
   Promise.all([
     CategoryService.list(),
-    CourseService.findWhere({ slug: req.params.slug })
+    CourseService.findWhere({ slug: req.params.slug }).populate('byTeacher')
   ])
     .then(([categories, course]) => {
       if (!course) {
