@@ -8,5 +8,6 @@ routers.route('/about').get(pageController.getAboutPage)
 routers.route('/register').get(authMiddlewares.alreadySession, pageController.getRegisterPage)
 routers.route('/login').get(authMiddlewares.alreadySession, pageController.getLoginPage)
 routers.route('/contact').get(pageController.getContactPage)
+routers.route('/contact').post(pageController.sendMail)
 
 export default routers
