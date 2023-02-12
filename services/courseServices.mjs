@@ -5,12 +5,13 @@ class CourseService extends BaseService {
     super(Course)
   }
 
-  listTeacherCourses (where) {
-    return Course.find(where)
-  }
-
-  listByCategory (where) {
-    return Course.find({ category: where.category }).sort('-createdAt')
+  listByQuery (filter) {
+    return Course.find({
+      $or: [
+        { name: { $regex: '.*' + filter.name + '.*', $options: 'i' } },
+        { category: filter.category }
+      ]
+    })
   }
 }
 

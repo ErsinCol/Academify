@@ -20,7 +20,6 @@ const loginUser = async (req, res) => {
     .then(user => {
       if (!user) return res.status(404).json({ type: 'error', message: 'not found user' })
       bcrypt.compare(password, user.password, (err, same) => {
-        if (err) return res.status(500).json({ type: 'error', message: err })
         if (same) {
           req.session.userID = user._id
           res.status(200).redirect('/users/dashboard')
@@ -44,7 +43,7 @@ const getDashboardPage = async (req, res) => {
   await Promise.all([
     authService.findWhere({ _id: req.session.userID }).populate('courses'),
     categoryService.list(),
-    courseServices.listTeacherCourses({ user: req.session.userID })
+    courseServices.findWhere({ user: req.session.userID })
   ]).then(([sessionUser, categories, teacherCourses]) => {
     res.status(200).render('dashboard', {
       page_name: 'dashboard',

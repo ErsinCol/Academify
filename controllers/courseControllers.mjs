@@ -1,6 +1,6 @@
-import CourseService from '../services/courseServices.mjs'
-import CategoryService from '../services/categoryService.mjs'
 import authService from '../services/authService.mjs'
+import categoryService from '../services/categoryService.mjs'
+import courseService from '../services/courseServices.mjs'
 
 const createCourse = (req, res) => {
   const course = {
@@ -10,7 +10,7 @@ const createCourse = (req, res) => {
     user: req.session.userID
   }
   // user teacher mı nasıl kontrol ederiz
-  CourseService.insert(course)
+  courseService.insert(course)
     .then(course => {
       if (!course) {
         return res.status(500).json({
@@ -30,52 +30,47 @@ const createCourse = (req, res) => {
 
 const getAllCourse = async (req, res) => {
   const categorySlug = req.query.categories
+  const search = req.query.search
+
+  const filter = {}
+
+  const fetchCategories = () => categoryService.list()
+  const fetchCourse = () => courseService.listByQuery(filter).populate('user')
+
+  let fecthData
 
   if (categorySlug) {
-    let filter = {}
-    await CategoryService.findWhere({ slug: categorySlug })
-      .then(returnedCat => {
-        filter = { category: returnedCat._id }
-      })
-    Promise.all([
-      CategoryService.list(),
-      CourseService.listByCategory(filter)
-    ]).then(([categories, courses]) => {
-      res.status(200).render('courses', {
-        page_name: 'courses',
-        courses,
-        categories
-      })
-    }).catch(err => {
-      res.status(500).json({
-        type: 'error',
-        message: err
-      })
+    fecthData = categoryService.findWhere({ slug: categorySlug }).then(returnedCat => {
+      filter.category = returnedCat._id
+      return Promise.all([fetchCategories(), fetchCourse()])
     })
-  } else {
-    Promise.all([
-      CategoryService.list(),
-      CourseService.list()
-    ]).then(([categories, courses]) => {
-      res.status(200).render('courses', {
-        page_name: 'courses',
-        courses,
-        categories
-      })
-    }).catch(err => {
-      res.status(500).json({
-        type: 'error',
-        message: err
-      })
-    })
+  } else if (search) {
+    filter.name = search
+    fecthData = Promise.all([fetchCategories(), fetchCourse()])
+  } else if (!categorySlug && !search) {
+    filter.name = '',
+    filter.category = null
+    fecthData = Promise.all([fetchCategories(), fetchCourse()])
   }
+
+  fecthData
+    .then(([categories, courses]) => {
+      res.status(200).render('courses', {
+        page_name: 'courses',
+        categories,
+        courses
+      })
+    })
+    .catch(err => {
+      res.status(500).json({ type: 'error', message: err })
+    })
 }
 
 const getCourse = (req, res) => {
   Promise.all([
     authService.findWhere({ _id: req.session.userID }),
-    CategoryService.list(),
-    CourseService.findWhere({ slug: req.params.slug }).populate('user')
+    categoryService.list(),
+    courseService.findWhere({ slug: req.params.slug }).populate('user')
   ])
     .then(([sessionUser, categories, course]) => {
       if (!course) {
