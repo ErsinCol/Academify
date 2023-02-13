@@ -5,6 +5,7 @@ import routeHandlers from './routes/index.mjs'
 import exeFlashMessages from './middlewares/flashMessage.mjs'
 import session from 'express-session'
 import flash from 'connect-flash'
+import methodOverride from 'method-override'
 import MongoStore from 'connect-mongo'
 const app = express()
 
@@ -24,6 +25,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}` })
+}))
+app.use(methodOverride('_method', {
+  methods: ['POST', 'GET']
 }))
 // ROUTES
 app.use('*', (req, res, next) => {

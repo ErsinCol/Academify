@@ -7,5 +7,6 @@ routers.route('/').get(courseControllers.getAllCourse)
 routers.route('/:slug').get(courseControllers.getCourse)
 routers.route('/enroll').post(courseControllers.enrollCourse)
 routers.route('/release').post(courseControllers.releaseCourse)
+routers.route('/:slug').delete(courseControllers.deleteCourse)
 
 export default routers

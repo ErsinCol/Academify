@@ -119,10 +119,22 @@ const releaseCourse = async (req, res) => {
     })
 }
 
+const deleteCourse = (req, res) => {
+  courseService.deleteWhere({ slug: req.params.slug })
+    .then(deletedCourse => {
+      req.flash('error', `${deletedCourse.name} has been removed successfully`)
+      res.status(200).redirect('/users/dashboard')
+    })
+    .catch(err => {
+      res.status(500).json({ type: 'error', message: err })
+    })
+}
+
 export default {
   createCourse,
   getAllCourse,
   getCourse,
   enrollCourse,
-  releaseCourse
+  releaseCourse,
+  deleteCourse
 }

@@ -17,6 +17,10 @@ class CourseService extends BaseService {
   listCourseByTeacher (where) {
     return Course.find(where)
   }
+
+  deleteWhere (where) {
+    return Course.findOneAndRemove(where, { new: true })
+  }
 }
 
 export default new CourseService()
