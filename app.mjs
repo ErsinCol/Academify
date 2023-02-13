@@ -2,7 +2,9 @@ import express from 'express'
 import exeConfigs from './configs/index.mjs'
 import exeLoaders from './loaders/index.mjs'
 import routeHandlers from './routes/index.mjs'
+import exeFlashMessages from './middlewares/flashMessage.mjs'
 import session from 'express-session'
+import flash from 'connect-flash'
 import MongoStore from 'connect-mongo'
 const app = express()
 
@@ -29,6 +31,9 @@ app.use('*', (req, res, next) => {
   userIN = req.session.userID
   next()
 })
+app.use(flash())
+app.use(exeFlashMessages)
+
 for (const [path, handler] of Object.entries(routeHandlers)) {
   app.use(path, handler)
 }

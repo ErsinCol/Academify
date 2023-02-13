@@ -13,6 +13,10 @@ class CourseService extends BaseService {
       ]
     })
   }
+
+  listCourseByTeacher(where){
+    return Course.find(where)
+  }
 }
 
 export default new CourseService()

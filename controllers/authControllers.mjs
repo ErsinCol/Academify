@@ -43,7 +43,7 @@ const getDashboardPage = async (req, res) => {
   await Promise.all([
     authService.findWhere({ _id: req.session.userID }).populate('courses'),
     categoryService.list(),
-    courseServices.findWhere({ user: req.session.userID })
+    courseServices.listCourseByTeacher({ user: req.session.userID })
   ]).then(([sessionUser, categories, teacherCourses]) => {
     res.status(200).render('dashboard', {
       page_name: 'dashboard',

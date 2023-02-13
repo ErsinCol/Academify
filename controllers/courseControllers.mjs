@@ -18,13 +18,12 @@ const createCourse = (req, res) => {
           message: 'Not created course'
         })
       }
-      res.redirect('/courses')
+      req.flash('success', `${course.name} course has been created succesfully...`)
+      res.status(200).redirect('/courses')
     })
     .catch(err => {
-      res.status(500).json({
-        type: 'error',
-        message: err
-      })
+      req.flash('error', `${course.name} course not created, something wrong... is error : ${err}`)
+      res.status(500).redirect('/courses')
     })
 }
 

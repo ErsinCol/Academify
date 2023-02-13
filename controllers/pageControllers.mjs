@@ -32,7 +32,8 @@ const getContactPage = (req, res) => {
 }
 
 const sendMail = async (req, res) => {
-  const outputMessage = `
+  try {
+    const outputMessage = `
     <h1>Mail From</h1>
     <ul>
       <li>Name: ${req.body.name}</li>
@@ -42,26 +43,32 @@ const sendMail = async (req, res) => {
     <p>${req.body.message}</p>
   `
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD
-    }
-  })
-  const info = await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
-    to: req.body.email,
-    subject: 'Education Portal Contact Form New Message...',
-    html: outputMessage
-  })
-  console.log('Message sent: %s', info.messageId)
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    })
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_FROM,
+      to: req.body.email,
+      subject: 'Education Portal Contact Form New Message...',
+      html: outputMessage
+    })
+    console.log('Message sent: %s', info.messageId)
 
-  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
 
-  res.redirect('/contact')
+    req.flash('success', 'We Received Your Message Successfully...')
+
+    res.status(200).redirect('/contact')
+  } catch (error) {
+    req.flash('error', `something wrong ... ${error}`)
+    res.redirect('/contact')
+  }
 }
 
 export default {
