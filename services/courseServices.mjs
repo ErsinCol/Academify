@@ -14,7 +14,7 @@ class CourseService extends BaseService {
     })
   }
 
-  listCourseByTeacher(where){
+  listCourseByTeacher (where) {
     return Course.find(where)
   }
 }

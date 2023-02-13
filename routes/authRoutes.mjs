@@ -1,9 +1,11 @@
 import express from 'express'
 import authControllers from '../controllers/authControllers.mjs'
 import authMiddlewares from '../middlewares/authMiddlewares.mjs'
+import schema from '../validations/User.mjs'
+import { validate } from '../middlewares/validate.mjs'
 const routers = express.Router()
 
-routers.route('/signup').post(authMiddlewares.checkExistRole, authControllers.createUser)
+routers.route('/signup').post(validate(schema.register, 'body'), authControllers.createUser)
 routers.route('/login').post(authControllers.loginUser)
 routers.route('/logout').get(authControllers.logoutUser)
 routers.route('/dashboard').get(authMiddlewares.checkAuth, authControllers.getDashboardPage)

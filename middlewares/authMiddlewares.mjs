@@ -17,32 +17,7 @@ const alreadySession = (req, res, next) => {
   next()
 }
 
-const checkExistRole = (req, res, next) => {
-  const roles = ['student', 'teacher']
-  if (!roles.includes(req.body.role)) {
-    return res.status(401).json({ type: 'error', message: 'you cant do it' })
-  }
-  next()
-}
-
-const checkRoleTeacher = (req, res, next) => {
-  if (!req.body.role === 'teacher') {
-    return res.status(401).json({ type: 'error', message: 'you cant do it' })
-  }
-  next()
-}
-
-const checkRoleStudent = (req, res, next) => {
-  if (!req.body.role === 'student') {
-    return res.status(401).json({ type: 'error', message: 'you cant do it' })
-  }
-  next()
-}
-
 export default {
   checkAuth,
-  alreadySession,
-  checkExistRole,
-  checkRoleTeacher,
-  checkRoleStudent
+  alreadySession
 }

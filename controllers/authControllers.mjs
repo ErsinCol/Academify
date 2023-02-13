@@ -7,6 +7,7 @@ const createUser = (req, res) => {
   authService.insert(req.body)
     .then(user => {
       if (!user) return res.status(500).json({ type: 'error', message: 'fail create user' })
+      req.flash('success', 'successfully registered to education portal app')
       res.redirect('/login')
     })
     .catch(err => {
@@ -20,6 +21,7 @@ const loginUser = async (req, res) => {
     .then(user => {
       if (!user) return res.status(404).json({ type: 'error', message: 'not found user' })
       bcrypt.compare(password, user.password, (err, same) => {
+        if (err) return res.status(500).json({ type: 'error', message: err })
         if (same) {
           req.session.userID = user._id
           res.status(200).redirect('/users/dashboard')
