@@ -1,4 +1,3 @@
-// joi ile nesneler oluşturcaz keyler kuralları karşılayan schema lar oluşturucaz export edicez
 import joi from 'joi'
 
 const register = joi.object({

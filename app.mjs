@@ -1,21 +1,23 @@
 import express from 'express'
-import exeConfigs from './configs/index.mjs'
-import exeLoaders from './loaders/index.mjs'
-import routeHandlers from './routes/index.mjs'
-import exeFlashMessages from './middlewares/flashMessage.mjs'
 import session from 'express-session'
 import flash from 'connect-flash'
 import methodOverride from 'method-override'
 import MongoStore from 'connect-mongo'
-const app = express()
 
-// EXECUTE INITIAL METHODS
+import exeConfigs from './configs/index.mjs'
+import exeLoaders from './loaders/index.mjs'
+import exeFlashMessages from './middlewares/flashMessage.mjs'
+import routeHandlers from './routes/index.mjs'
+
+//* INITIAL METHODS
+const app = express()
 exeConfigs()
 exeLoaders()
 
+//* GLOBAL VARIABLES
 global.userIN = null
 
-// MIDDLEWARES
+//* MIDDLEWARES
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
 app.use(express.json())
@@ -29,20 +31,18 @@ app.use(session({
 app.use(methodOverride('_method', {
   methods: ['POST', 'GET']
 }))
-// ROUTES
+app.use(flash())
+app.use(exeFlashMessages)
+//* ROUTES
 app.use('*', (req, res, next) => {
-  // eslint-disable-next-line no-undef
   userIN = req.session.userID
   next()
 })
-app.use(flash())
-app.use(exeFlashMessages)
-
 for (const [path, handler] of Object.entries(routeHandlers)) {
   app.use(path, handler)
 }
 
-// LISTEN PORT
+//* LISTEN PORT
 app.listen(process.env.PORT, () => {
   console.log(`app started on port ${process.env.PORT}`)
 })

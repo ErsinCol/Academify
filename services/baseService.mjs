@@ -14,6 +14,14 @@ class BaseService {
   findWhere (where) {
     return this.BaseModel.findOne(where)
   }
+
+  updateWhere (where, data) {
+    return this.BaseModel.findByIdAndUpdate(where, data, { new: true })
+  }
+
+  deleteWhere (where) {
+    return this.BaseModel.findOneAndRemove(where, { new: true })
+  }
 }
 
 export default BaseService

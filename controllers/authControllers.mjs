@@ -15,9 +15,9 @@ const createUser = (req, res) => {
     })
 }
 
-const loginUser = async (req, res) => {
+const loginUser = (req, res) => {
   const { email, password } = req.body
-  await authService.findWhere({ email })
+  authService.findWhere({ email })
     .then(user => {
       if (!user) return res.status(404).json({ type: 'error', message: 'not found user' })
       bcrypt.compare(password, user.password, (err, same) => {
@@ -35,14 +35,14 @@ const loginUser = async (req, res) => {
     })
 }
 
-const logoutUser = async (req, res) => {
+const logoutUser = (req, res) => {
   req.session.destroy(() => {
     res.status(200).redirect('/')
   })
 }
 
-const getDashboardPage = async (req, res) => {
-  await Promise.all([
+const getDashboardPage = (req, res) => {
+  Promise.all([
     authService.findWhere({ _id: req.session.userID }).populate('courses'),
     categoryService.list(),
     courseServices.listCourseByTeacher({ user: req.session.userID })

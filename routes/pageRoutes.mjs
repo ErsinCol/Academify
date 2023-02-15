@@ -1,6 +1,7 @@
 import express from 'express'
 import pageController from '../controllers/pageControllers.mjs'
 import authMiddlewares from '../middlewares/authMiddlewares.mjs'
+
 const routers = express.Router()
 
 routers.route('/').get(pageController.getMainPage)

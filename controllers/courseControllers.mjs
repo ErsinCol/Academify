@@ -9,7 +9,6 @@ const createCourse = (req, res) => {
     category: req.body.category,
     user: req.session.userID
   }
-  // user teacher mı nasıl kontrol ederiz
   courseService.insert(course)
     .then(course => {
       if (!course) {
@@ -27,7 +26,7 @@ const createCourse = (req, res) => {
     })
 }
 
-const getAllCourse = async (req, res) => {
+const getAllCourse = (req, res) => {
   const categorySlug = req.query.categories
   const search = req.query.search
 
@@ -93,8 +92,8 @@ const getCourse = (req, res) => {
     })
 }
 
-const enrollCourse = async (req, res) => {
-  await authService.findWhere({ _id: req.session.userID })
+const enrollCourse = (req, res) => {
+  authService.findWhere({ _id: req.session.userID })
     .then(user => {
       user.courses.push({ _id: req.body.courseID })
       return authService.updateWhere(req.session.userID, user)
@@ -106,8 +105,8 @@ const enrollCourse = async (req, res) => {
     })
 }
 
-const releaseCourse = async (req, res) => {
-  await authService.findWhere({ _id: req.session.userID })
+const releaseCourse = (req, res) => {
+  authService.findWhere({ _id: req.session.userID })
     .then(user => {
       user.courses.pull({ _id: req.body.courseID })
       return authService.updateWhere(req.session.userID, user)
