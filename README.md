@@ -23,7 +23,7 @@ Endpoints
 https://localhost:3000
 ```
 
-#####Users Endpoints 
+##### Users Endpoints 
 
 ```js
 `/users/signup` >>> Post >>> User register
@@ -37,14 +37,14 @@ https://localhost:3000
 `/users/:id` >>> Delete >>> Delete user by admin
 ```
 
-#####Category Endpoints 
+##### Category Endpoints 
 
 ```js
 `/categories` >>> Post >>> Create category by admin
 `/categories/:id` >>> Delete >>> Delete category by admin
 ```
 
-#####Course Endpoints 
+##### Course Endpoints 
 
 ```js
 `/courses` >>> Post >>> Create course by teacher
@@ -56,7 +56,7 @@ https://localhost:3000
 `/courses/release` >>> Get >>> Release course by student
 ```
 
-#####Page Endpoints 
+##### Page Endpoints 
 
 ```js
 `/` >>> Get >>> Show main ejs page 
