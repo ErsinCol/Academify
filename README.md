@@ -1,6 +1,6 @@
 # Academify
 ### Education Portal App - NODE.JS - EXPRESS.JS - MONGODB - EJS
-====================================================
+
 Preparation 
 ------------
 ```
